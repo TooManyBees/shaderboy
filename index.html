@@ -7,6 +7,7 @@
   <script src="program.js" async defer></script>
   <script src="codemirror.js" async defer></script>
   <script src="init.js" async defer></script>
+  <link rel="stylesheet" type="text/css" href="shaderboy.css">
   <link rel="stylesheet" type="text/css" href="codemirror.css">
 </head>
 <body>
@@ -14,7 +15,13 @@
     <source id="video-source" type="video/mp4">
   </video>
   <canvas id="swap" style="display:none;"></canvas>
-  <canvas id="canvas"></canvas>
+
+  <div class="output">
+    <div class="canvas-wrapper">
+      <canvas id="canvas"></canvas>
+      <button id="mirror-toggle">Mirror</button>
+    </div>
+  </div>
   <textarea id="textarea"></textarea>
 
   <script type="text/javascript">

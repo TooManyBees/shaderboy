@@ -1,0 +1,27 @@
+.output {
+  display: flex;
+}
+.canvas-wrapper {
+  position: relative;
+}
+
+#mirror-toggle {
+  position: absolute;
+  bottom: 10px;
+  right: 10px;
+  padding: 5px 10px;
+  border-radius: 8px;
+  color: white;
+  background-color: rgb(101 79 103 / 70%);
+  border: none;
+}
+#mirror-toggle:before {
+  content: "🚫 ";
+}
+#mirror-toggle[on] {
+  color: black;
+  background-color: rgb(250 199 255 / 90%);
+}
+#mirror-toggle[on]:before {
+  content: "✅ ";
+}

@@ -2,8 +2,10 @@ const DEFAULT_VERTEX = `
 attribute vec2 a_texcoord;
 attribute vec2 a_position;
 varying vec2 v_texcoord;
+uniform float u_mirror;
+
 void main() {
-  gl_Position = vec4(a_position, 0.0, 1.0);
+  gl_Position = vec4(a_position.x * u_mirror, a_position.y, 0.0, 1.0);
   v_texcoord = a_texcoord;
 }
 `.trim();
@@ -59,6 +61,10 @@ class Program {
     return true;
   }
 
+  mirror(m) {
+    this.gl.uniform1f(this.uniforms["u_mirror"], m ? - 1.0 : 1.0);
+  }
+
   compileShader(source, type) {
     const gl = this.gl;
     const shader = gl.createShader(type);
@@ -88,6 +94,9 @@ class Program {
 
       this.uniforms["u_resolution"] = gl.getUniformLocation(program, "u_resolution");
       this.gl.uniform2f(this.uniforms["u_resolution"], this.canvas.width, this.canvas.height);
+
+      this.uniforms["u_mirror"] = gl.getUniformLocation(program, "u_mirror");
+      this.gl.uniform1f(this.uniforms["u_mirror"], 1.0);
 
       this.uniforms["u_texture"] = gl.getUniformLocation(program, "u_texture");
       gl.uniform1i(this.uniforms["u_texture"], 0);

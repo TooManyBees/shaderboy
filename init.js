@@ -56,7 +56,8 @@ async function loadWasm() {
 }
 
 async function init() {
-  const textarea = document.getElementById('textarea');
+  const mirrorToggle = document.getElementById("mirror-toggle");
+  const textarea = document.getElementById("textarea");
   let previousFragment;
   try {
     previousFragment = localStorage.getItem("previous-frag-shader");
@@ -67,7 +68,7 @@ async function init() {
 
   const editor = window.editor = CodeMirror.fromTextArea(textarea, {
     lineNumbers: true,
-    mode: 'glsl',
+    mode: "glsl",
   });
 
   const [{ source, canvas, swap }, wasm] = await Promise.all([
@@ -81,12 +82,23 @@ async function init() {
   }
 
   editor.setOption("extraKeys", {
-    'Cmd-S': function() {
+    "Cmd-S": function() {
       program.recompile(editor.getValue());
     },
   });
 
-  const scratchPad = swap.getContext('2d');
+  let mirrored = false;
+  mirrorToggle.addEventListener('click', function(e) {
+    mirrored = !mirrored;
+    program.mirror(mirrored);
+    if (mirrored) {
+      mirrorToggle.setAttribute("on", "");
+    } else {
+      mirrorToggle.removeAttribute("on");
+    }
+  });
+
+  const scratchPad = swap.getContext("2d");
   const frameDuration = 1000 / 30;
   function draw() {
     // scratchPad.drawImage(source, 0, 0);
