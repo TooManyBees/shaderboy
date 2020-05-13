@@ -20,8 +20,46 @@ uniform vec2 u_leftEye;
 uniform vec2 u_rightEye;
 uniform sampler2D u_texture;
 
+float interference(vec2 st, vec2 p1, vec2 p2) {
+    float d1 = distance(st, p1);
+    float d2 = distance(st, p2);
+    float wave1 = cos(pow(d1, 0.5) * 100.0 + u_time / 200.) / 2.0 + 0.5;
+    wave1 *= smoothstep(0.75, 0.0, d1);
+    float wave2 = cos(pow(d2, 0.5) * 100.0 + u_time / 200.) / 2.0 + 0.5;
+    wave2 *= smoothstep(0.75, 0.0, d2);
+    return wave1 + wave2;
+}
+
+vec4 flare(vec2 st, vec2 p) {
+  vec4 baseGlow = smoothstep(
+    vec4(0.065, 0.06, 0.07, 0.08),
+    vec4(0.005),
+    vec4(distance(st, p))
+  );
+
+  float h = length((st - p) * vec2(5.0, 50.0));
+  float v = length((st - p) * vec2(150.0, 15.0));
+  vec4 handles = vec4(0.05)/(h*h) + vec4(0.05)/(v*v);
+
+  return baseGlow + min(handles, vec4(0.5));
+}
+
 void main() {
-  gl_FragColor = texture2D(u_texture, v_texcoord);
+  vec2 st = gl_FragCoord.xy / u_resolution;
+  vec2 leftEye = u_leftEye / u_resolution;
+  vec2 rightEye = u_rightEye / u_resolution;
+
+  vec4 color = texture2D(u_texture, v_texcoord);
+
+  // Add some rad light flares
+  // color += flare(st, leftEye);
+  // color += flare(st, rightEye);
+
+  /* Add some psychic waves */
+  // float i = interference(st, leftEye, rightEye);
+  // color += smoothstep(0.0, 1.0, i) * vec4(0.6, 0.0, 0.8, 1.0);
+
+  gl_FragColor = color;
 }
 `.trim();
 
