@@ -8,6 +8,8 @@ async function getMedia() {
 
     await new Promise((resolve, reject) => {
       video.addEventListener("loadeddata", () => {
+        video.setAttribute("width", video.videoWidth);
+        video.setAttribute("height", video.videoHeight);
         canvas.setAttribute("width", video.videoWidth);
         canvas.setAttribute("height", video.videoHeight);
         swap.setAttribute("width", video.videoWidth);
@@ -22,7 +24,7 @@ async function getMedia() {
       swap,
     };
   } catch (e) {
-    console.error(e);
+    console.warn(e);
 
     const image = new Image();
 
@@ -98,14 +100,27 @@ async function init() {
     }
   });
 
+  const tracker = new clm.tracker();
+  tracker.init();
+  tracker.start(source);
+
   const scratchPad = swap.getContext("2d");
   const frameDuration = 1000 / 30;
   function draw() {
-    // scratchPad.drawImage(source, 0, 0);
-    // const imageData = scratchPad.getImageData(0, 0, swap.width, swap.height);
-    // const faceData = doAnalysis(imageData);
-    program.draw(source);
+    let data = tracker.getCurrentPosition();
+    let faceData;
+    if (data) {
+      // This data has the origin at top-left; convert to glsl's coords
+      data = data.map(([x, y]) => [x, canvas.height - y]);
+      faceData = {
+        leftEye: data[27],
+        rightEye: data[32],
+      };
+    }
+    program.draw(source, faceData);
     setTimeout(draw, frameDuration);
   }
   draw();
+
+  window.getCurrentPosition = () => tracker.getCurrentPosition();
 }

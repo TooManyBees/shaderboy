@@ -6,14 +6,13 @@
   <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
   <script src="program.js" async defer></script>
   <script src="codemirror.js" async defer></script>
+  <script src="clmtracker/clmtracker.js"></script>
   <script src="init.js" async defer></script>
   <link rel="stylesheet" type="text/css" href="shaderboy.css">
   <link rel="stylesheet" type="text/css" href="codemirror.css">
 </head>
 <body>
-  <video id="video" style="display:none;" autoplay>
-    <source id="video-source" type="video/mp4">
-  </video>
+  <video id="video" style="display:none;" loop playsinline autoplay></video>
   <canvas id="swap" style="display:none;"></canvas>
 
   <div class="output">

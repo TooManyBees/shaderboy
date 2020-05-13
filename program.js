@@ -15,6 +15,9 @@ precision mediump float;
 
 varying vec2 v_texcoord;
 uniform vec2 u_resolution;
+uniform float u_time;
+uniform vec2 u_leftEye;
+uniform vec2 u_rightEye;
 uniform sampler2D u_texture;
 
 void main() {
@@ -42,10 +45,15 @@ class Program {
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, 1, 1, 0, gl.RGBA, gl.UNSIGNED_BYTE, new Uint8Array([0, 0, 0, 0]));
   }
 
-  draw(imageData) {
+  draw(imageData, faceData) {
     const gl = this.gl;
     gl.bindTexture(gl.TEXTURE_2D, this.texture);
     gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA, gl.RGBA, gl.UNSIGNED_BYTE, imageData);
+    if (faceData) {
+      gl.uniform2f(this.uniforms["u_leftEye"], faceData.leftEye[0], faceData.leftEye[1]);
+      gl.uniform2f(this.uniforms["u_rightEye"], faceData.rightEye[0], faceData.rightEye[1]);
+    }
+    gl.uniform1f(this.uniforms["u_time"], this.startTime - performance.now());
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
   }
 
@@ -101,6 +109,10 @@ class Program {
       this.uniforms["u_texture"] = gl.getUniformLocation(program, "u_texture");
       gl.uniform1i(this.uniforms["u_texture"], 0);
 
+      this.uniforms["u_leftEye"] = gl.getUniformLocation(program, "u_leftEye");
+      this.uniforms["u_rightEye"] = gl.getUniformLocation(program, "u_rightEye");
+      this.uniforms["u_time"] = gl.getUniformLocation(program, "u_time");
+
       {
         const position = gl.getAttribLocation(program, 'a_position');
         gl.enableVertexAttribArray(position);
@@ -127,6 +139,7 @@ class Program {
         gl.deleteProgram(this.program);
       }
       this.program = program;
+      this.startTime = performance.now();
       return program;
     } else {
       throw new Error(`Couldn't link program:\n${gl.getProgramInfoLog(program)}`);
