@@ -79,13 +79,26 @@ async function init() {
   ]);
 
   const program = window.program = new Program(canvas, swap, source);
+
+  function recompile(shaderText) {
+    try {
+      program.recompile(shaderText);
+    } catch (e) {
+      if (e instanceof GlslCompileError) {
+        console.warn(e);
+      } else {
+        console.error(e);
+      }
+    }
+  }
+
   if (previousFragment) {
-    program.recompile(textarea.textContent);
+    recompile(textarea.textContent);
   }
 
   editor.setOption("extraKeys", {
     "Cmd-S": function() {
-      program.recompile(editor.getValue());
+      recompile(editor.getValue());
     },
   });
 

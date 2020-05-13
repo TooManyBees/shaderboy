@@ -25,6 +25,13 @@ void main() {
 }
 `.trim();
 
+class GlslCompileError extends Error {
+  constructor(errors) {
+    super(errors);
+    this.errors = errors;
+  }
+}
+
 class Program {
   constructor(canvas, swap, video) {
     this.canvas = canvas;
@@ -58,15 +65,8 @@ class Program {
   }
 
   recompile(source) {
-    let fragmentShader
-    try {
-      fragmentShader = this.compileShader(source, this.gl.FRAGMENT_SHADER);
-    } catch (e) {
-      console.error(e);
-      return false;
-    }
+    const fragmentShader = this.compileShader(source, this.gl.FRAGMENT_SHADER);
     this.linkProgram(this.VERTEX_SHADER, fragmentShader);
-    return true;
   }
 
   mirror(m) {
@@ -81,7 +81,7 @@ class Program {
     if (gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
       return shader;
     } else {
-      throw new Error(`Coudn't compile shader:\n${gl.getShaderInfoLog(shader)}`);
+      throw new GlslCompileError(gl.getShaderInfoLog(shader));
     }
   }
 
