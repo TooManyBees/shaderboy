@@ -1,6 +1,5 @@
 async function getMedia() {
   const canvas = document.getElementById("canvas");
-  const swap = document.getElementById("swap");
   try {
     const video = document.getElementById("video");
     let stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
@@ -12,8 +11,6 @@ async function getMedia() {
         video.setAttribute("height", video.videoHeight);
         canvas.setAttribute("width", video.videoWidth);
         canvas.setAttribute("height", video.videoHeight);
-        swap.setAttribute("width", video.videoWidth);
-        swap.setAttribute("height", video.videoHeight);
         resolve();
       });
     });
@@ -21,7 +18,6 @@ async function getMedia() {
     return {
       source: video,
       canvas,
-      swap,
     };
   } catch (e) {
     console.warn(e);
@@ -38,8 +34,6 @@ async function getMedia() {
         }
         canvas.setAttribute("width", image.width);
         canvas.setAttribute("height", image.height);
-        swap.setAttribute("width", image.width);
-        swap.setAttribute("height", image.height);
         resolve();
       };
       image.onerror = reject;
@@ -48,13 +42,8 @@ async function getMedia() {
     return {
       source: image,
       canvas,
-      swap,
     };
   }
-}
-
-async function loadWasm() {
-
 }
 
 async function init() {
@@ -73,12 +62,9 @@ async function init() {
     mode: "glsl",
   });
 
-  const [{ source, canvas, swap }, wasm] = await Promise.all([
-    getMedia(),
-    loadWasm(),
-  ]);
+  const { source, canvas } = await getMedia();
 
-  const program = window.program = new Program(canvas, swap, source);
+  const program = window.program = new Program(canvas, source);
 
   function recompile(shaderText) {
     try {
@@ -117,7 +103,6 @@ async function init() {
   tracker.init();
   tracker.start(source);
 
-  const scratchPad = swap.getContext("2d");
   const frameDuration = 1000 / 30;
   function draw() {
     let data = tracker.getCurrentPosition();

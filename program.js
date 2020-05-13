@@ -33,9 +33,8 @@ class GlslCompileError extends Error {
 }
 
 class Program {
-  constructor(canvas, swap, video) {
+  constructor(canvas, video) {
     this.canvas = canvas;
-    this.swap = swap;
     const gl = this.gl = this.canvas.getContext('webgl');
     this.video = video;
     this.uniforms = {};
