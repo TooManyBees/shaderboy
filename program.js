@@ -69,6 +69,7 @@ class Program {
   }
 
   mirror(m) {
+    this.mirrored = m;
     this.gl.uniform1f(this.uniforms["u_mirror"], m ? - 1.0 : 1.0);
   }
 
@@ -103,7 +104,7 @@ class Program {
       this.gl.uniform2f(this.uniforms["u_resolution"], this.canvas.width, this.canvas.height);
 
       this.uniforms["u_mirror"] = gl.getUniformLocation(program, "u_mirror");
-      this.gl.uniform1f(this.uniforms["u_mirror"], 1.0);
+      this.gl.uniform1f(this.uniforms["u_mirror"], this.mirrored || 1.0);
 
       this.uniforms["u_texture"] = gl.getUniformLocation(program, "u_texture");
       gl.uniform1i(this.uniforms["u_texture"], 0);
