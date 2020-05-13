@@ -113,7 +113,7 @@ async function init() {
     let faceData;
     if (data) {
       // This data has the origin at top-left; convert to glsl's coords
-      data = data.map(([x, y]) => [x, canvas.height - y]);
+      data = data.map(([x, y]) => [mirrored ? canvas.width - x : x, canvas.height - y]);
       faceData = {
         leftEye: data[27],
         rightEye: data[32],
