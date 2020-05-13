@@ -60,6 +60,10 @@ async function init() {
   const editor = window.editor = CodeMirror.fromTextArea(textarea, {
     lineNumbers: true,
     mode: "glsl",
+    viewportMargin: Infinity,
+    lineWrapping: true,
+    // TODO: Split fragment shader "preamble" into non-editable bit
+    // firstLineNumber: 10,
   });
 
   const { source, canvas } = await getMedia();

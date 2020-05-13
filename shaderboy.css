@@ -25,3 +25,7 @@
 #mirror-toggle[on]:before {
   content: "✅ ";
 }
+
+.CodeMirror {
+  height: auto;
+}
