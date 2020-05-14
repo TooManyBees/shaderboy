@@ -33,6 +33,11 @@ header p {
   color: white;
   background-color: rgb(101 79 103 / 70%);
   border: none;
+  min-width: 8em;
+}
+.controls button:focus {
+  outline: none;
+  box-shadow: 0px 0px 0px 1px #FF80BA, 3px 3px 0px #FF80BA;
 }
 .controls button:active, .controls button[on] {
   color: black;
@@ -62,15 +67,31 @@ header p {
 
 footer {
   margin-top: 20px;
-  margin-bottom: 40px;
+  margin-bottom: 10px;
   padding: 10px;
   background-color: #272822;
+  display: flex;
+  justify-content: space-between;
 }
-footer > :first-child {
-  margin-top: 0;
+.footer-left {
+  display: flex;
+  align-items: center;
 }
-footer > :last-child {
-  margin-bottom: 0;
+.footer-left a {
+  display: flex;
+  align-items: center;
+}
+.footer-left > :not(:first-child) {
+  margin-left: 1em;
+}
+.footer-right {
+  display: flex;
+  flex-direction: column;
+}
+
+.copyright {
+  display: flex;
+  align-items: center;
 }
 
 .error {
