@@ -61,16 +61,29 @@ a:visited {
 
 .CodeMirror {
   height: auto;
+  border: 2px solid #FF80BA;
 }
 
 .CodeMirror-foldmarker {
   color: #f92672;
 }
 
-.CodeMirror, #canvas {
+.CodeMirror, #canvas, footer {
   margin: 0 5px 0 5px;
   box-shadow: -5px 5px #ae81ff;
-  border: 2px solid #FF80BA;
+}
+
+footer {
+  margin-top: 20px;
+  margin-bottom: 40px;
+  padding: 10px;
+  background-color: #272822;
+}
+footer > :first-child {
+  margin-top: 0;
+}
+footer > :last-child {
+  margin-bottom: 0;
 }
 
 .error {
