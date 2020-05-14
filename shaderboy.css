@@ -57,3 +57,7 @@ a:visited {
   box-shadow: -5px 5px #ae81ff;
   border: 2px solid #FF80BA;
 }
+
+.error {
+  background-color: rgb(180 0 0 / 50%);
+}

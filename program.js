@@ -66,7 +66,7 @@ void main() {
 class GlslCompileError extends Error {
   constructor(errors) {
     super(errors);
-    this.errors = errors;
+    this.errors = errors.split(/\r?\n/);
   }
 }
 
@@ -188,4 +188,5 @@ class Program {
 export default Program;
 export {
   DEFAULT_FRAGMENT,
+  GlslCompileError,
 }

@@ -8,7 +8,7 @@ import "./codemirror/brace-fold.js";
 import "./codemirror/comment.js";
 
 import clm from "./clmtracker/clmtracker.js";
-import Program, { DEFAULT_FRAGMENT } from "./program.js";
+import Program, { GlslCompileError, DEFAULT_FRAGMENT } from "./program.js";
 
 async function getMedia() {
   const canvas = document.getElementById("canvas");
@@ -111,12 +111,34 @@ async function init() {
 
   const program = window.program = new Program(canvas, source);
 
+  const errorWidgets = [];
+  function appendErrorWidgets(lines) {
+    const errors = lines.map(line => {
+      const m = line.match(/^ERROR:\s+\d+:(\d+):\s+(.*)/);
+      if (m) {
+        const widget = document.createElement('samp');
+        widget.textContent = m[2];
+        return { line: parseInt(m[1], 10), widget };
+      }
+    }).filter(e => !!e);
+    errors.map(({ line, widget }) => {
+      const lineWidget = editor.addLineWidget(line - 1, widget, { className: 'error' });
+      errorWidgets.push(lineWidget);
+    });
+  }
+  function clearErrorWidgets() {
+    errorWidgets.forEach(widget => widget.clear());
+    errorWidgets.length = 0;
+  }
+
   function recompile(shaderText) {
+    clearErrorWidgets();
     try {
       program.recompile(shaderText);
     } catch (e) {
       if (e instanceof GlslCompileError) {
-        console.warn(e);
+        console.warn(e.errors);
+        appendErrorWidgets(e.errors);
       } else {
         console.error(e);
       }
