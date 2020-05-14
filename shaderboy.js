@@ -35,6 +35,7 @@ async function getMedia() {
     console.warn(e);
 
     const image = new Image();
+    const imageCanvas = document.getElementById("image");
 
     await new Promise((resolve, reject) => {
       image.src = "20191223_114551.jpg";
@@ -46,6 +47,9 @@ async function getMedia() {
         }
         canvas.setAttribute("width", image.width);
         canvas.setAttribute("height", image.height);
+        imageCanvas.setAttribute("width", image.width);
+        imageCanvas.setAttribute("height", image.height);
+        imageCanvas.getContext("2d").drawImage(image, 0, 0, image.width, image.height);
         resolve();
       };
       image.onerror = reject;
@@ -53,6 +57,7 @@ async function getMedia() {
 
     return {
       source: image,
+      altSource: imageCanvas,
       canvas,
     };
   }
@@ -119,7 +124,7 @@ async function init() {
     }
   }
 
-  const { source, canvas } = await getMedia();
+  const { source, canvas, altSource } = await getMedia();
 
   const program = window.program = new Program(canvas, source);
 
@@ -190,9 +195,11 @@ async function init() {
     } catch (e) {}
   });
 
-  const tracker = new clm.tracker();
+  const tracker = window.tracker = new clm.tracker({
+    stopOnConvergence: (source instanceof Image),
+  });
   tracker.init();
-  tracker.start(source);
+  tracker.start(altSource || source);
 
   const frameDuration = 1000 / 30;
   function draw() {
