@@ -80,6 +80,14 @@ async function init() {
     theme: "monokai",
     lineNumbers: true,
     mode: 'x-shader/x-fragment',
+    extraKeys: {
+      "Cmd-S": function() {
+        recompile(editor.getValue());
+      },
+      "Cmd-/": function(cm) {
+        cm.toggleComment({indent: true});
+      },
+    },
     viewportMargin: Infinity,
     lineWrapping: true,
     matchBrackets: true,
@@ -124,10 +132,6 @@ async function init() {
     }
   }
 
-  const { source, canvas, altSource } = await getMedia();
-
-  const program = window.program = new Program(canvas, source);
-
   const errorWidgets = [];
   function appendErrorWidgets(lines) {
     const errors = lines.map(line => {
@@ -148,6 +152,10 @@ async function init() {
     errorWidgets.length = 0;
   }
 
+  const { source, canvas, altSource } = await getMedia();
+
+  const program = window.program = new Program(canvas, source);
+
   function recompile(shaderText) {
     clearErrorWidgets();
     try {
@@ -166,15 +174,6 @@ async function init() {
   if (previousFragment) {
     recompile(textarea.textContent);
   }
-
-  editor.setOption("extraKeys", {
-    "Cmd-S": function() {
-      recompile(editor.getValue());
-    },
-    "Cmd-/": function(cm) {
-      cm.toggleComment({indent: true});
-    },
-  });
 
   let mirrored = false;
   mirrorToggle.addEventListener('click', function(e) {
