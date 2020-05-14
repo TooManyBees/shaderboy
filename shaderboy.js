@@ -109,6 +109,16 @@ async function init() {
     // firstLineNumber: 10,
   });
 
+  if (!previousFragment || previousFragment === DEFAULT_FRAGMENT) {
+    const lines = DEFAULT_FRAGMENT.split(/\r?\n/);
+    try {
+      editor.foldCode(lines.findIndex(line => line.startsWith("float interference")));
+      editor.foldCode(lines.findIndex(line => line.startsWith("vec4 flare")));
+    } catch (e) {
+      console.error(e);
+    }
+  }
+
   const { source, canvas } = await getMedia();
 
   const program = window.program = new Program(canvas, source);

@@ -51,11 +51,10 @@ void main() {
 
   vec4 color = texture2D(u_texture, v_texcoord);
 
-  // Add some rad light flares
-  // color += flare(st, leftEye);
-  // color += flare(st, rightEye);
+  // Uncomment below to add some rad light flares
+  // color += flare(st, leftEye) + flare(st, rightEye);
 
-  /* Add some psychic waves */
+  // Uncomment below to add some sweet hypnotic waves
   // float i = interference(st, leftEye, rightEye);
   // color += smoothstep(0.0, 1.0, i) * vec4(0.6, 0.0, 0.8, 1.0);
 
