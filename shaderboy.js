@@ -2,6 +2,9 @@ import "./codemirror/codemirror.js";
 import "./codemirror/clike.js";
 import "./codemirror/closebrackets.js";
 import "./codemirror/matchbrackets.js";
+import "./codemirror/foldcode.js";
+import "./codemirror/foldgutter.js";
+import "./codemirror/brace-fold.js";
 import "./codemirror/comment.js";
 
 import clm from "./clmtracker/clmtracker.js";
@@ -74,6 +77,32 @@ async function init() {
     lineWrapping: true,
     matchBrackets: true,
     autoCloseBrackets: true,
+    gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"],
+    foldGutter: true,
+    foldOptions: {
+      widget: (from, to) => {
+        let count = undefined;
+
+        // Get open / close token
+        let startToken = '{', endToken = '}';
+        const prevLine = editor.getLine(from.line);
+        if (prevLine.lastIndexOf('[') > prevLine.lastIndexOf('{')) {
+          startToken = '[', endToken = ']';
+        }
+
+        // Get json content
+        const internal = editor.getRange(from, to);
+        const toParse = startToken + internal + endToken;
+
+        // Get key count
+        try {
+          const parsed = JSON.parse(toParse);
+          count = Object.keys(parsed).length;
+        } catch(e) { }
+
+        return count ? `\u21A4${count}\u21A6` : '\u2194';
+      },
+    },
     // TODO: Split fragment shader "preamble" into non-editable bit
     // firstLineNumber: 10,
   });

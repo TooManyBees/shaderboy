@@ -1,4 +1,5 @@
 @import "./codemirror/codemirror.css";
+@import "./codemirror/foldgutter.css";
 @import "./codemirror/monokai.css";
 
 body {
@@ -45,6 +46,10 @@ a:visited {
 
 .CodeMirror {
   height: auto;
+}
+
+.CodeMirror-foldmarker {
+  color: #f92672;
 }
 
 .CodeMirror, #canvas {
