@@ -7,7 +7,7 @@ import "./codemirror/foldgutter.js";
 import "./codemirror/brace-fold.js";
 import "./codemirror/comment.js";
 
-import clm from "./clmtracker/clmtracker.js";
+import clm from "./clmtrackr/clmtrackr.js";
 import Program, { GlslCompileError, DEFAULT_FRAGMENT } from "./program.js";
 
 async function getMedia() {
