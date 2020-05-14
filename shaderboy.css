@@ -17,10 +17,13 @@ a:visited {
 .output {
   display: flex;
   justify-content: center;
-  margin-bottom: 20px;
 }
 .canvas-wrapper {
   position: relative;
+}
+
+.controls {
+  margin: 20px 0;
 }
 
 #mirror-toggle {
@@ -42,6 +45,18 @@ a:visited {
 }
 #mirror-toggle[on]:before {
   content: "✅ ";
+}
+
+#reset-button {
+  padding: 5px 10px;
+  border-radius: 8px;
+  color: white;
+  background-color: rgb(101 79 103 / 70%);
+  border: none;
+}
+#reset-button:active {
+  color: black;
+  background-color: rgb(250 199 255 / 90%);
 }
 
 .CodeMirror {

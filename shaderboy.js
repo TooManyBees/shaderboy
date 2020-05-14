@@ -59,11 +59,13 @@ async function getMedia() {
 }
 
 async function init() {
+  const PREVIOUS_FRAG_SHADER = "previous-frag-shader";
   const mirrorToggle = document.getElementById("mirror-toggle");
+  const resetButton = document.getElementById("reset-button");
   const textarea = document.getElementById("textarea");
   let previousFragment;
   try {
-    previousFragment = localStorage.getItem("previous-frag-shader");
+    previousFragment = localStorage.getItem(PREVIOUS_FRAG_SHADER);
   } catch (e) {
     console.warn("Couldn't access localStorage for previous fragment shader.");
   }
@@ -135,6 +137,7 @@ async function init() {
     clearErrorWidgets();
     try {
       program.recompile(shaderText);
+      localStorage.setItem(PREVIOUS_FRAG_SHADER, shaderText);
     } catch (e) {
       if (e instanceof GlslCompileError) {
         console.warn(e.errors);
@@ -167,6 +170,14 @@ async function init() {
     } else {
       mirrorToggle.removeAttribute("on");
     }
+  });
+
+  resetButton.addEventListener('click', function(e) {
+    editor.setValue(DEFAULT_FRAGMENT);
+    recompile(DEFAULT_FRAGMENT);
+    try {
+      localStorage.removeItem(PREVIOUS_FRAG_SHADER);
+    } catch (e) {}
   });
 
   const tracker = new clm.tracker();
