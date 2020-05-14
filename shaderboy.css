@@ -14,49 +14,36 @@ a:visited {
   color: #eb98ff;
 }
 
-.output {
-  display: flex;
-  justify-content: center;
+header h1 {
+  margin-bottom: 0.33em;
 }
-.canvas-wrapper {
-  position: relative;
+header p {
+  font-style: italic;
+  margin-top: 0;
 }
 
 .controls {
   margin: 20px 0;
 }
 
-#mirror-toggle {
-  position: absolute;
-  bottom: 10px;
-  right: 10px;
+.controls button {
+  margin: 0 5px;
   padding: 5px 10px;
   border-radius: 8px;
   color: white;
   background-color: rgb(101 79 103 / 70%);
   border: none;
+}
+.controls button:active, .controls button[on] {
+  color: black;
+  background-color: rgb(250 199 255 / 90%);
 }
 #mirror-toggle:before {
   content: "🚫 ";
-}
-#mirror-toggle[on] {
-  color: black;
-  background-color: rgb(250 199 255 / 90%);
+  line-height: 100%;
 }
 #mirror-toggle[on]:before {
   content: "✅ ";
-}
-
-#reset-button {
-  padding: 5px 10px;
-  border-radius: 8px;
-  color: white;
-  background-color: rgb(101 79 103 / 70%);
-  border: none;
-}
-#reset-button:active {
-  color: black;
-  background-color: rgb(250 199 255 / 90%);
 }
 
 .CodeMirror {

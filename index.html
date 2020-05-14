@@ -8,19 +8,19 @@
   <link rel="stylesheet" type="text/css" href="./shaderboy.css">
 </head>
 <body>
-  <header><h1>Shaderboy</h1></header>
+  <header>
+    <h1>Shaderboy</h1>
+    <p class="subtitle">A GLSL playground with face detection</p>
+  </header>
   <video id="video" style="display:none;" loop playsinline autoplay></video>
   <canvas id="image" style="display:none;"></canvas>
 
-  <div class="output">
-    <div class="canvas-wrapper">
-      <canvas id="canvas"></canvas>
-      <button id="mirror-toggle">Mirror</button>
-    </div>
-  </div>
+  <canvas id="canvas"></canvas>
 
   <div class="controls">
     <button id="reset-button">Reset to Default</button>
+    <button id="save-button">Save & Compile</button>
+    <button id="mirror-toggle">Mirror</button>
   </div>
 
   <textarea id="textarea"></textarea>
