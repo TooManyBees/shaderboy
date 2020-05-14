@@ -1,5 +1,22 @@
+@import "./codemirror/codemirror.css";
+@import "./codemirror/monokai.css";
+
+body {
+  background-color: #36372f;
+  color: #f8f8f2;
+}
+
+a {
+  color: #ae81ff;
+}
+a:visited {
+  color: #eb98ff;
+}
+
 .output {
   display: flex;
+  justify-content: center;
+  margin-bottom: 20px;
 }
 .canvas-wrapper {
   position: relative;
@@ -28,4 +45,10 @@
 
 .CodeMirror {
   height: auto;
+}
+
+.CodeMirror, #canvas {
+  margin: 0 5px 0 5px;
+  box-shadow: -5px 5px #ae81ff;
+  border: 2px solid #FF80BA;
 }

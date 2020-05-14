@@ -61,7 +61,7 @@ void main() {
 
   gl_FragColor = color;
 }
-`.trim();
+`.trim() + "\n";
 
 class GlslCompileError extends Error {
   constructor(errors) {
@@ -183,4 +183,9 @@ class Program {
       throw new Error(`Couldn't link program:\n${gl.getProgramInfoLog(program)}`);
     }
   }
+}
+
+export default Program;
+export {
+  DEFAULT_FRAGMENT,
 }

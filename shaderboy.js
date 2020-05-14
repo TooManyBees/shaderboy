@@ -1,3 +1,12 @@
+import "./codemirror/codemirror.js";
+import "./codemirror/clike.js";
+import "./codemirror/closebrackets.js";
+import "./codemirror/matchbrackets.js";
+import "./codemirror/comment.js";
+
+import clm from "./clmtracker/clmtracker.js";
+import Program, { DEFAULT_FRAGMENT } from "./program.js";
+
 async function getMedia() {
   const canvas = document.getElementById("canvas");
   try {
@@ -58,10 +67,13 @@ async function init() {
   textarea.textContent = previousFragment || DEFAULT_FRAGMENT;
 
   const editor = window.editor = CodeMirror.fromTextArea(textarea, {
+    theme: "monokai",
     lineNumbers: true,
-    mode: "glsl",
+    mode: 'x-shader/x-fragment',
     viewportMargin: Infinity,
     lineWrapping: true,
+    matchBrackets: true,
+    autoCloseBrackets: true,
     // TODO: Split fragment shader "preamble" into non-editable bit
     // firstLineNumber: 10,
   });
@@ -89,6 +101,9 @@ async function init() {
   editor.setOption("extraKeys", {
     "Cmd-S": function() {
       recompile(editor.getValue());
+    },
+    "Cmd-/": function(cm) {
+      cm.toggleComment({indent: true});
     },
   });
 
@@ -123,6 +138,6 @@ async function init() {
     setTimeout(draw, frameDuration);
   }
   draw();
-
-  window.getCurrentPosition = () => tracker.getCurrentPosition();
 }
+
+window.addEventListener("load", init);

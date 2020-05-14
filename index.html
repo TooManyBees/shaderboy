@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <title>test test test?</title>
+  <title>Shaderboy</title>
   <meta charset="utf-8">
   <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
-  <script src="program.js" async defer></script>
-  <script src="codemirror.js" async defer></script>
-  <script src="clmtracker/clmtracker.js"></script>
-  <script src="init.js" async defer></script>
-  <link rel="stylesheet" type="text/css" href="codemirror.css">
-  <link rel="stylesheet" type="text/css" href="shaderboy.css">
+  <script type="module" src="./shaderboy.js"></script>
+  <link rel="stylesheet" type="text/css" href="./shaderboy.css">
 </head>
 <body>
+  <header><h1>Shaderboy</h1></header>
   <video id="video" style="display:none;" loop playsinline autoplay></video>
 
   <div class="output">
@@ -22,8 +19,14 @@
   </div>
   <textarea id="textarea"></textarea>
 
-  <script type="text/javascript">
-    window.addEventListener('load', () => init());
-  </script>
+  <footer>
+    <p>©2020 Jess Bees, <a href="https://www.toomanybees.com">toomanybees.com</a></p>
+    <p>
+      <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+        <img alt="Creative Commons License" style="border-width:0" src="cc-sa.png" />
+      </a><br />
+      This work is licensed under a <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">Creative Commons Attribution-ShareAlike 4.0 International License</a>.
+    </p>
+  </footer>
 </body>
 </html>
