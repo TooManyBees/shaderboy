@@ -21,13 +21,13 @@ uniform vec2 u_rightEye;
 uniform sampler2D u_texture;
 
 float interference(vec2 st, vec2 p1, vec2 p2) {
-    float d1 = distance(st, p1);
-    float d2 = distance(st, p2);
-    float wave1 = cos(pow(d1, 0.5) * 100.0 + u_time / 200.) / 2.0 + 0.5;
-    wave1 *= smoothstep(0.75, 0.0, d1);
-    float wave2 = cos(pow(d2, 0.5) * 100.0 + u_time / 200.) / 2.0 + 0.5;
-    wave2 *= smoothstep(0.75, 0.0, d2);
-    return wave1 + wave2;
+  float d1 = distance(st, p1);
+  float d2 = distance(st, p2);
+  float wave1 = cos(pow(d1, 0.5) * 100.0 + u_time / 200.) / 2.0 + 0.5;
+  wave1 *= smoothstep(0.75, 0.0, d1);
+  float wave2 = cos(pow(d2, 0.5) * 100.0 + u_time / 200.) / 2.0 + 0.5;
+  wave2 *= smoothstep(0.75, 0.0, d2);
+  return wave1 + wave2;
 }
 
 vec4 flare(vec2 st, vec2 p) {
