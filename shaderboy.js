@@ -282,7 +282,9 @@ async function init() {
       }, 5);
     }
   }, { threshold: 0.75 });
-  stickyObserver.observe(placeholder);
+  if (!window.matchMedia('(max-width: 480px)').matches) {
+    stickyObserver.observe(placeholder);
+  }
 }
 
 window.addEventListener("load", init);
