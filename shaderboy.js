@@ -138,6 +138,7 @@ async function init() {
     try {
       editor.foldCode(lines.findIndex(line => line.startsWith("float interference")));
       editor.foldCode(lines.findIndex(line => line.startsWith("vec4 flare")));
+      editor.foldCode(lines.findIndex(line => line.startsWith("vec4 landmarks")));
     } catch (e) {
       console.error(e);
     }
@@ -253,6 +254,12 @@ async function init() {
       faceData = {
         leftEye: data[27],
         rightEye: data[32],
+        mouth: [
+          (data[44][0] + data[50][0])/2,
+          (data[57][1] + data[60][1])/2,
+        ],
+        openMouth: Math.abs(data[57] - data[60]),
+        vertices: data,
       };
     }
     program.draw(source, faceData);

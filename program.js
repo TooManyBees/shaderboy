@@ -18,6 +18,9 @@ uniform vec2 u_resolution;
 uniform float u_time;
 uniform vec2 u_leftEye;
 uniform vec2 u_rightEye;
+uniform vec2 u_mouth;
+uniform float u_openMouth;
+uniform vec2 u_faceVertices[70];
 uniform sampler2D u_texture;
 
 float interference(vec2 st, vec2 p1, vec2 p2) {
@@ -44,10 +47,21 @@ vec4 flare(vec2 st, vec2 p) {
   return baseGlow + min(handles, vec4(0.5));
 }
 
+vec4 landmarks(vec2 st) {
+  vec4 color = vec4(0.0);
+  vec4 pointColor = vec4(0.1, 0.7, 1.0, 1.0);
+  for (int i = 0; i < 70; i++) {
+    vec2 point = u_faceVertices[i] / u_resolution;
+    color += smoothstep(0., distance(st, point), 0.002) * pointColor;
+  }
+  return color;
+}
+
 void main() {
   vec2 st = gl_FragCoord.xy / u_resolution;
   vec2 leftEye = u_leftEye / u_resolution;
   vec2 rightEye = u_rightEye / u_resolution;
+  vec2 mouth = u_mouth / u_resolution;
 
   vec4 color = texture2D(u_texture, v_texcoord);
 
@@ -57,6 +71,9 @@ void main() {
   // Uncomment below to add some sweet hypnotic waves
   // float i = interference(st, leftEye, rightEye);
   // color += smoothstep(0.0, 1.0, i) * vec4(0.6, 0.0, 0.8, 1.0);
+
+  // Uncomment below to see all face landmark points
+  // color += landmarks(st);
 
   gl_FragColor = color;
 }
@@ -95,6 +112,9 @@ class Program {
     if (faceData) {
       gl.uniform2f(this.uniforms["u_leftEye"], faceData.leftEye[0], faceData.leftEye[1]);
       gl.uniform2f(this.uniforms["u_rightEye"], faceData.rightEye[0], faceData.rightEye[1]);
+      gl.uniform2f(this.uniforms["u_mouth"], faceData.mouth[0], faceData.mouth[1]);
+      gl.uniform1f(this.uniforms["u_openMouth"], faceData.openMouth);
+      gl.uniform2fv(this.uniforms["u_faceVertices"], faceData.vertices.flat());
     }
     gl.uniform1f(this.uniforms["u_time"], this.startTime - performance.now());
     gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
@@ -153,7 +173,11 @@ class Program {
 
       this.uniforms["u_leftEye"] = gl.getUniformLocation(program, "u_leftEye");
       this.uniforms["u_rightEye"] = gl.getUniformLocation(program, "u_rightEye");
+      this.uniforms["u_mouth"] = gl.getUniformLocation(program, "u_mouth");
+      this.uniforms["u_openMouth"] = gl.getUniformLocation(program, "u_openMouth");
       this.uniforms["u_time"] = gl.getUniformLocation(program, "u_time");
+
+      this.uniforms["u_faceVertices"] = gl.getUniformLocation(program, "u_faceVertices");
 
       {
         const position = gl.getAttribLocation(program, 'a_position');
