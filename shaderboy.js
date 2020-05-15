@@ -87,15 +87,16 @@ async function init() {
   }
   textarea.textContent = previousFragment || DEFAULT_FRAGMENT;
 
+  const isMac = CodeMirror.keyMap.default === CodeMirror.keyMap.macDefault;
   const editor = window.editor = CodeMirror.fromTextArea(textarea, {
     theme: "monokai",
     lineNumbers: true,
     mode: 'x-shader/x-fragment',
     extraKeys: {
-      "Cmd-S": function() {
-        recompile(editor.getValue());
+      [isMac ? "Cmd-S" : "Ctrl-S"]: function(cm) {
+        recompile(cm.getValue());
       },
-      "Cmd-/": function(cm) {
+      [isMac ? "Cmd-/" : "Ctrl-/"]: function(cm) {
         cm.toggleComment({indent: true});
       },
     },
