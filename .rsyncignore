@@ -1,3 +1,6 @@
+.git
+.gitignore
+.rsyncignore
 .login
 .DS_Store
 sync
