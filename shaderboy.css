@@ -144,5 +144,5 @@ hr {
   border: none;
   border-radius: 50%;
   background-image: linear-gradient(30deg, #9dffcb, #ae81ff);
-  box-shadow: 2px -2px 4px #240942c7 inset;
+  box-shadow: 1px -1px 1px #ffdd8c inset, 2px -2px 4px #0cffd1 inset;
 }
