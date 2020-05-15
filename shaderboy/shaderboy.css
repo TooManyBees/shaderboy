@@ -6,8 +6,11 @@ body {
   background-color: #36372f;
   color: #f8f8f2;
   font-family: Georgia;
-  line-height: 1.25;
   font-size: 1.25em;
+}
+
+p {
+  line-height: 1.5;
 }
 
 a {

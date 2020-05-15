@@ -6,11 +6,16 @@
   <meta content="width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0" name="viewport">
   <script type="module" src="./shaderboy.js" async></script>
   <link rel="stylesheet" type="text/css" href="./shaderboy.css">
+  <meta content='Too Many Bees!' name='og:site_name'>
+  <meta content='summary' name='twitter:card'>
+  <meta content='Shaderboy' name='og:title'>
+  <meta content='A GLSL playground with face tracking' name='description'>
+  <meta content='A GLSL playground with face tracking' name='og:description'>
 </head>
 <body>
   <header>
     <h1>Shaderboy</h1>
-    <p class="subtitle">A GLSL playground with face detection</p>
+    <p class="subtitle">A GLSL playground with face tracking</p>
   </header>
   <video id="video" style="display:none;" loop playsinline autoplay></video>
   <canvas id="image" style="display:none;"></canvas>
@@ -34,6 +39,7 @@
 
   <div class="shadow">
   <section>
+    <p>Sure you've got your <a href="https://tastenkunst.github.io/brfv4_javascript_examples/" rel="external">HTML5 face tracking demos</a>, and you've got your <a href="https://patriciogonzalezvivo.github.io/glslEditor/" rel="external">GLSL live coding environments</a>, but <em>do you have both rolled into one?</em> Since you're on this webpage, the answer is yes.</p>
     <p>
       Shaderboy is a GLSL playground with a live fragment shader coding environment. It performs face tracking and supplies the fragment shader with facial landmark coordinates. Click <strong>Save & Compile</strong> or <kbd>Ctrl-S</kbd> in the editor to update the shader running in the canvas.
     </p>
