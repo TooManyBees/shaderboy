@@ -12,19 +12,20 @@ import Program, { GlslCompileError, DEFAULT_FRAGMENT } from "./program.js";
 
 async function getVideo() {
   const canvas = document.getElementById("canvas");
+  const placeholder = document.getElementById("canvas-placeholder");
   const video = document.getElementById("video");
   let stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
   video.srcObject = stream;
 
   await new Promise((resolve, reject) => {
-    video.addEventListener("loadeddata", () => {
-      video.setAttribute("width", video.videoWidth);
-      video.setAttribute("height", video.videoHeight);
-      canvas.setAttribute("width", video.videoWidth);
-      canvas.setAttribute("height", video.videoHeight);
-      resolve();
-    });
+    video.addEventListener("loadeddata", resolve);
   });
+
+  video.setAttribute("width", video.videoWidth);
+  video.setAttribute("height", video.videoHeight);
+  canvas.setAttribute("width", video.videoWidth);
+  canvas.setAttribute("height", video.videoHeight);
+  placeholder.style.height = `${placeholder.firstElementChild.offsetHeight}px`;
 
   return {
     source: video,
@@ -34,6 +35,7 @@ async function getVideo() {
 
 async function getImage() {
   const canvas = document.getElementById("canvas");
+  const placeholder = document.getElementById("canvas-placeholder");
   const image = new Image();
   const imageCanvas = document.getElementById("image");
 
@@ -53,6 +55,7 @@ async function getImage() {
   imageCanvas.setAttribute("width", image.width);
   imageCanvas.setAttribute("height", image.height);
   imageCanvas.getContext("2d").drawImage(image, 0, 0, image.width, image.height);
+  placeholder.style.height = `${placeholder.firstElementChild.offsetHeight}px`;
 
   return {
     source: image,
@@ -258,6 +261,28 @@ async function init() {
 
   startTracker();
   draw();
+
+  const canvasWrapper = document.querySelector('.canvas-wrapper');
+  const placeholder = document.getElementById("canvas-placeholder");
+  const stickyObserver = new IntersectionObserver(entries => {
+    const pos = placeholder.getBoundingClientRect();
+    const top = pos.top;
+    const right = pos.left + canvasWrapper.firstElementChild.offsetWidth;
+    if (entries[0].isIntersecting) {
+      canvasWrapper.style.top = `${top}px`;
+      canvasWrapper.style.right = `${right}px`;
+      canvasWrapper.classList.remove("sticky");
+    } else {
+      canvasWrapper.style.top = `${top}px`;
+      canvasWrapper.style.right = `${right}px`;
+      canvasWrapper.style.position = "fixed";
+      setTimeout(() => {
+        canvasWrapper.removeAttribute("style");
+        canvasWrapper.classList.add("sticky");
+      }, 5);
+    }
+  }, { threshold: 0.75 });
+  stickyObserver.observe(placeholder);
 }
 
 window.addEventListener("load", init);
