@@ -10,56 +10,63 @@ import "./codemirror/comment.js";
 import clm from "./clmtrackr/clmtrackr.js";
 import Program, { GlslCompileError, DEFAULT_FRAGMENT } from "./program.js";
 
-async function getMedia() {
+async function getVideo() {
   const canvas = document.getElementById("canvas");
-  try {
-    const video = document.getElementById("video");
-    let stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
-    video.srcObject = stream;
+  const video = document.getElementById("video");
+  let stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: "user" } });
+  video.srcObject = stream;
 
-    await new Promise((resolve, reject) => {
-      video.addEventListener("loadeddata", () => {
-        video.setAttribute("width", video.videoWidth);
-        video.setAttribute("height", video.videoHeight);
-        canvas.setAttribute("width", video.videoWidth);
-        canvas.setAttribute("height", video.videoHeight);
-        resolve();
-      });
+  await new Promise((resolve, reject) => {
+    video.addEventListener("loadeddata", () => {
+      video.setAttribute("width", video.videoWidth);
+      video.setAttribute("height", video.videoHeight);
+      canvas.setAttribute("width", video.videoWidth);
+      canvas.setAttribute("height", video.videoHeight);
+      resolve();
     });
+  });
 
-    return {
-      source: video,
-      canvas,
-    };
+  return {
+    source: video,
+    canvas,
+  };
+}
+
+async function getImage() {
+  const canvas = document.getElementById("canvas");
+  const image = new Image();
+  const imageCanvas = document.getElementById("image");
+
+  await new Promise((resolve, reject) => {
+    image.src = "20191223_114551.jpg";
+    image.onload = resolve;
+    image.onerror = reject;
+  });
+
+  if (image.width > 720) {
+    const ratio = image.height / image.width;
+    image.width = 720;
+    image.height = ratio * 720;
+  }
+  canvas.setAttribute("width", image.width);
+  canvas.setAttribute("height", image.height);
+  imageCanvas.setAttribute("width", image.width);
+  imageCanvas.setAttribute("height", image.height);
+  imageCanvas.getContext("2d").drawImage(image, 0, 0, image.width, image.height);
+
+  return {
+    source: image,
+    altSource: imageCanvas,
+    canvas,
+  };
+}
+
+async function getInitialMedia() {
+  try {
+    return await getVideo(canvas);
   } catch (e) {
     console.warn(e);
-
-    const image = new Image();
-    const imageCanvas = document.getElementById("image");
-
-    await new Promise((resolve, reject) => {
-      image.src = "20191223_114551.jpg";
-      image.onload = () => {
-        if (image.width > 720) {
-          const ratio = image.height / image.width;
-          image.width = 720;
-          image.height = ratio * 720;
-        }
-        canvas.setAttribute("width", image.width);
-        canvas.setAttribute("height", image.height);
-        imageCanvas.setAttribute("width", image.width);
-        imageCanvas.setAttribute("height", image.height);
-        imageCanvas.getContext("2d").drawImage(image, 0, 0, image.width, image.height);
-        resolve();
-      };
-      image.onerror = reject;
-    });
-
-    return {
-      source: image,
-      altSource: imageCanvas,
-      canvas,
-    };
+    return await getImage(canvas);
   }
 }
 
@@ -67,6 +74,7 @@ async function init() {
   const PREVIOUS_FRAG_SHADER = "previous-frag-shader";
   const mirrorToggle = document.getElementById("mirror-toggle");
   const resetButton = document.getElementById("reset-button");
+  const sourceToggle = document.getElementById("source-toggle");
   const textarea = document.getElementById("textarea");
   let previousFragment;
   try {
@@ -152,7 +160,10 @@ async function init() {
     errorWidgets.length = 0;
   }
 
-  const { source, canvas, altSource } = await getMedia();
+  let { source, canvas, altSource } = await getInitialMedia();
+  if (source instanceof HTMLVideoElement) {
+    sourceToggle.setAttribute("on", "");
+  }
 
   const program = window.program = new Program(canvas, source);
 
@@ -186,6 +197,29 @@ async function init() {
     }
   });
 
+  sourceToggle.addEventListener('click', async function(e) {
+    sourceToggle.setAttribute("disabled", "");
+    try {
+      if (source instanceof Image) {
+        const { source: source_ } = await getVideo();
+        source = source_;
+        altSource = undefined;
+        sourceToggle.setAttribute("on", "");
+      } else {
+        const { source: source_, altSource: altSource_ } = await getImage();
+        source.srcObject.getTracks()[0].stop();
+        source = source_;
+        altSource = altSource_;
+        sourceToggle.removeAttribute("on");
+      }
+      program.setResolution();
+      startTracker();
+    } catch (e) {
+      console.error(e);
+    }
+    sourceToggle.removeAttribute("disabled");
+  });
+
   resetButton.addEventListener('click', function(e) {
     editor.setValue(DEFAULT_FRAGMENT);
     recompile(DEFAULT_FRAGMENT);
@@ -194,11 +228,17 @@ async function init() {
     } catch (e) {}
   });
 
-  const tracker = window.tracker = new clm.tracker({
-    stopOnConvergence: (source instanceof Image),
-  });
-  tracker.init();
-  tracker.start(altSource || source);
+  let tracker;
+  function startTracker() {
+    if (tracker) {
+      tracker.stop();
+    }
+    tracker = window.tracker = new clm.tracker({
+      stopOnConvergence: (source instanceof Image),
+    });
+    tracker.init();
+    tracker.start(altSource || source);
+  }
 
   const frameDuration = 1000 / 30;
   function draw() {
@@ -215,6 +255,8 @@ async function init() {
     program.draw(source, faceData);
     setTimeout(draw, frameDuration);
   }
+
+  startTracker();
   draw();
 }
 

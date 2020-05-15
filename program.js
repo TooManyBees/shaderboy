@@ -110,6 +110,11 @@ class Program {
     this.gl.uniform1f(this.uniforms["u_mirror"], m ? - 1.0 : 1.0);
   }
 
+  setResolution() {
+    this.gl.uniform2f(this.uniforms["u_resolution"], this.canvas.width, this.canvas.height);
+    this.gl.viewport(0, 0, this.canvas.width, this.canvas.height);
+  }
+
   compileShader(source, type) {
     const gl = this.gl;
     const shader = gl.createShader(type);
