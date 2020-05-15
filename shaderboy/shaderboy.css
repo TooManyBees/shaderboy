@@ -153,5 +153,5 @@ hr {
 strong, kbd {
   font-family: inherit;
   font-weight: bold;
-  text-shadow: 1px 1px #ffdd8c;
+  color: #ffdd8c;
 }
