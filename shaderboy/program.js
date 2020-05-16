@@ -73,7 +73,7 @@ void main() {
   // color += smoothstep(0.0, 1.0, i) * vec4(0.6, 0.0, 0.8, 1.0);
 
   // Uncomment the next line to see all face landmark points
-  // color += landmarks(st);
+  color += landmarks(st);
 
   gl_FragColor = color;
 }
