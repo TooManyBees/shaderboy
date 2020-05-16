@@ -65,14 +65,14 @@ void main() {
 
   vec4 color = texture2D(u_texture, v_texcoord);
 
-  // Uncomment below to add some rad light flares
+  // Uncomment the next line to add some rad light flares
   // color += flare(st, leftEye) + flare(st, rightEye);
 
-  // Uncomment below to add some sweet hypnotic waves
+  // Uncomment the next 2 lines to add some sweet hypnotic waves
   // float i = interference(st, leftEye, rightEye);
   // color += smoothstep(0.0, 1.0, i) * vec4(0.6, 0.0, 0.8, 1.0);
 
-  // Uncomment below to see all face landmark points
+  // Uncomment the next line to see all face landmark points
   // color += landmarks(st);
 
   gl_FragColor = color;
