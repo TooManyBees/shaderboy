@@ -78,6 +78,7 @@ async function init() {
   const mirrorToggle = document.getElementById("mirror-toggle");
   const resetButton = document.getElementById("reset-button");
   const sourceToggle = document.getElementById("source-toggle");
+  const saveButton = document.getElementById("save-button");
   const textarea = document.getElementById("textarea");
   let previousFragment;
   try {
@@ -172,6 +173,9 @@ async function init() {
 
   const program = window.program = new Program(canvas, source);
 
+  saveButton.addEventListener("click", () => {
+    recompile(editor.getValue());
+  });
   function recompile(shaderText) {
     clearErrorWidgets();
     try {
