@@ -47,6 +47,18 @@
       Two sample effects are commented out on lines 56 and 59-60. An effect that reveals facial landmarks is commented out on line 63. Un-collapse their functions and recompile to see what they do.
     </p>
     <p>
+      The shader's uniforms for landmarks are:
+      <dl>
+        <dt><code>u_leftEye</code></dt><dd>Coordinate: center of left eye</dd>
+        <dt><code>u_rightEye</code></dt><dd>Coordinate: center of right eye</dd>
+        <dt><code>u_noseBridge</code></dt><dd>Line with 3 coordinates along bridge of nose</dd>
+        <dt><code>u_faceUpVector</code></dt><dd>A unitless slope between the chin and the bridge of the nose</dd>
+        <dt><code>u_mouth</code></dt><dd>Coordinate: center of mouth</dd>
+        <dt><code>u_openMouth</code></dt><dd>How open the mouth is in pixels</dd>
+        <dt><code>u_faceVertices</code></dt><dd>All 70 of the tracked landmarks (including the ones listed above)</dd>
+      </dl>
+    </p>
+    <p>
       Shaderboy uses <a href="https://github.com/auduno/clmtrackr/" rel="external">clmtrackr</a> for face tracking and <a href="https://codemirror.net" rel="external">CodeMirror</a> for its coding interface.
     </p>
   </section>

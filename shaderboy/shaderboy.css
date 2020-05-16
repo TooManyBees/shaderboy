@@ -155,3 +155,7 @@ strong, kbd {
   font-weight: bold;
   color: #ffdd8c;
 }
+
+dt {
+  color: #ffdd8c;;
+}

@@ -18,6 +18,8 @@ uniform vec2 u_resolution;
 uniform float u_time;
 uniform vec2 u_leftEye;
 uniform vec2 u_rightEye;
+uniform vec2 u_noseBridge[3];
+uniform vec2 u_faceUpVector;
 uniform vec2 u_mouth;
 uniform float u_openMouth;
 uniform vec2 u_faceVertices[70];
@@ -114,6 +116,8 @@ class Program {
       gl.uniform2f(this.uniforms["u_rightEye"], faceData.rightEye[0], faceData.rightEye[1]);
       gl.uniform2f(this.uniforms["u_mouth"], faceData.mouth[0], faceData.mouth[1]);
       gl.uniform1f(this.uniforms["u_openMouth"], faceData.openMouth);
+      gl.uniform2fv(this.uniforms["u_noseBridge"], faceData.noseBridge.flat());
+      gl.uniform2f(this.uniforms["u_faceUpVector"], faceData.faceUpVector[0], faceData.faceUpVector[1]);
       gl.uniform2fv(this.uniforms["u_faceVertices"], faceData.vertices.flat());
     }
     gl.uniform1f(this.uniforms["u_time"], this.startTime - performance.now());
@@ -175,9 +179,11 @@ class Program {
       this.uniforms["u_rightEye"] = gl.getUniformLocation(program, "u_rightEye");
       this.uniforms["u_mouth"] = gl.getUniformLocation(program, "u_mouth");
       this.uniforms["u_openMouth"] = gl.getUniformLocation(program, "u_openMouth");
-      this.uniforms["u_time"] = gl.getUniformLocation(program, "u_time");
-
+      this.uniforms["u_noseBridge"] = gl.getUniformLocation(program, "u_noseBridge");
+      this.uniforms["u_faceUpVector"] = gl.getUniformLocation(program, "u_faceUpVector");
       this.uniforms["u_faceVertices"] = gl.getUniformLocation(program, "u_faceVertices");
+
+      this.uniforms["u_time"] = gl.getUniformLocation(program, "u_time");
 
       {
         const position = gl.getAttribLocation(program, 'a_position');
