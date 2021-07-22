@@ -265,7 +265,10 @@ async function init() {
         ],
         noseBridge: [data[62], data[41], data[33]],
         faceUpVector: [data[33][0] - data[7][0], data[33][1] - data[7][1]],
-        openMouth: Math.abs(data[57] - data[60]),
+        openMouth: Math.hypot(
+          Math.abs(data[57][0] - data[60][0]),
+          Math.abs(data[57][1] - data[60][1])
+        ),
         vertices: data,
       };
     }
